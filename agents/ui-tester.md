@@ -82,8 +82,16 @@ For each page/component you cover, compare what you observe to its declared inte
   the declared drag-to-dismiss gesture failed.)
 - **Back vs declared intent** — a page with `back: <dest>` must have a working back/close control to that
   destination. A page with `back: none` is an intentional forced step — do **not** flag a missing back there.
-- **Form outcomes** — for a page with a `form`, submit **valid** data → must reach `on_success`; submit
-  **invalid** data → the declared `on_error` message must appear AND you must NOT navigate away.
+- **Form outcomes** — for a page with a `form`, submit **valid** data → must reach `on_success` (a page, or
+  a stay-put success message); submit **invalid** data → the declared `on_error` message must appear AND you
+  must NOT navigate away. Use each field's `type`/`options` to enter realistic valid data and a matching invalid case.
+- **Conditional fields & gated CTAs** — a field with `show_when: "<f>=<v>"` must be **hidden** until you set
+  that value, then **appear** — and a hidden field must never block submit even if `required`. An action with
+  `enabled_when` must be **disabled** until its condition holds, then enable (flag a button greyed forever, or
+  one enabled too early).
+- **Cross-field rules & prefill** — try to **violate** each form `rules` entry (mismatched confirm password,
+  end-date before start-date) → submit must be blocked with a clear error. An edit form with `prefill: true`
+  must load **populated**, not blank.
 - **Declared states** — if a page declares `states.empty/error/...`, drive the app into that state where
   feasible and confirm the declared content/CTA appears.
 - **Nav shells** — a page with `shell: <id>` must show that nav shell, and every nav item must route to

@@ -92,7 +92,7 @@ For each role, dispatch a `ui-tester` agent (use the Agent tool; concurrent, cap
 - The persona/checklist from `.agents/ui-tester.md`
 - Its assigned **role** + how to register/log in as it
 - Its **explicit page list** (its rows of the matrix) and **both viewports** (desktop then mobile) — it is NOT done until every page on its list is visited at every viewport with every interactive element exercised (its **coverage contract** — see `.agents/ui-tester.md`)
-- **`WIREFRAME.yaml`** (the whole file, if it exists) — its **answer key** for intent checks (section 0.5 of the agent): declared destinations, auth gating, component `dismiss` interactions, `back` intent, form `on_success`/`on_error` outcomes, declared `states`, and `external` handoffs. The agent flags reality-vs-intent mismatches, not just liveness.
+- **`WIREFRAME.yaml`** (the whole file, if it exists) — its **answer key** for intent checks (section 0.5 of the agent): declared destinations, auth gating, component `dismiss` interactions, `back` intent, form `on_success`/`on_error` outcomes (plus `show_when` field visibility, `enabled_when` gated CTAs, cross-field `rules`, and `prefill` edit forms), declared `states`, and `external` handoffs. The agent flags reality-vs-intent mismatches, not just liveness.
 - The **base URL**, the **run ID**, and the screenshot directory `.uitest/screenshots/<runid>/`
 - Relevant `LESSONS.md` entries tagged `[ui] [ux] [a11y]`
 
