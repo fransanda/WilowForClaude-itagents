@@ -37,6 +37,7 @@ Tools are loaded on demand — if Playwright MCP tools aren't already in context
 - **Viewport matrix** to cover: at minimum **desktop (1280×800)** and **mobile (375×812)**; tablet (768×1024) if the project is responsive-heavy.
 - **The run ID** (for naming screenshots and tagging any accounts you create).
 - **Your page list** — the explicit set of pages (routes) you must cover for your role. This is your scope; you do not get to narrow it.
+- **`WIREFRAME.yaml`** (if the project has one) — the project's declared UI **intent**: pages with `auth`/`roles`/`actions` (label → destination, incl. branched `submit: {on_success, on_error}`), `navigation` shells, `journeys` (critical end-to-end paths), `components` (sheets/modals/confirms with declared `dismiss` interactions), `messages` (toasts/inline-errors/tooltips), per-page `states` (empty/error/...), and `external:` handoffs. **This is your answer key** — you test reality *against* it (section 0.5). If there's no WIREFRAME.yaml, fall back to judgment + the universal heuristics.
 - Relevant LESSONS.md entries tagged `[ui]`, `[ux]`, `[a11y]`.
 
 ## 0. Coverage contract — READ FIRST (this is how you avoid missing things)
@@ -61,6 +62,49 @@ FOR each viewport in [desktop 1280×800, then mobile 375×812 (and tablet if giv
 ```
 
 Never mark a page covered from memory or a glance — only after the snapshot + element loop above. If you run low on budget, do NOT skip pages to "finish" — report the pages you couldn't reach as uncovered so the orchestrator can re-dispatch. Take the time it takes.
+
+## 0.5 — Test reality against intent (WIREFRAME.yaml) + universal heuristics
+
+You are not just checking "does the button do *something*" — you check "does it do **what the app
+intends**." Two layers:
+
+### Layer 1 — wireframe-anchored checks (when WIREFRAME.yaml exists)
+For each page/component you cover, compare what you observe to its declared intent and flag any mismatch:
+- **Flow / destination correctness** — every `actions` entry must reach its declared destination. If
+  `landing` declares `"Let's get started": signup`, clicking it must land on the signup page — landing
+  on `home` instead is a **flaw** (wrong destination), *even though the button "worked"*.
+- **Auth gating** — `auth: true` pages must NOT be reachable without authenticating; reaching one while
+  logged out (or being dumped into an authed area straight from a CTA with no login) is a `Critical`
+  auth-bypass. Declared public pages must be reachable.
+- **Declared affordance works** — interactions declared on `components` must function. For a sheet/modal
+  with `dismiss: [drag-down, ...]`, perform a pointer **drag** on its handle (NOT a wheel/scroll) and
+  assert the sheet itself moves/closes. (Do not flag the background scrolling on its own — only flag that
+  the declared drag-to-dismiss gesture failed.)
+- **Back vs declared intent** — a page with `back: <dest>` must have a working back/close control to that
+  destination. A page with `back: none` is an intentional forced step — do **not** flag a missing back there.
+- **Form outcomes** — for a page with a `form`, submit **valid** data → must reach `on_success`; submit
+  **invalid** data → the declared `on_error` message must appear AND you must NOT navigate away.
+- **Declared states** — if a page declares `states.empty/error/...`, drive the app into that state where
+  feasible and confirm the declared content/CTA appears.
+- **Nav shells** — a page with `shell: <id>` must show that nav shell, and every nav item must route to
+  its declared page.
+- **External handoffs** — `external: <name> -> <return>` should open the handoff and, on return, land on
+  the declared return page.
+- **Drift** — note any route/flow you find in the running app that is **missing from** WIREFRAME.yaml, and
+  any wireframe page you **could not find** in the app. Report these as drift (Type: `Logical Workflow Issue`).
+
+### Layer 2 — universal UX heuristics (always, with or without a wireframe)
+These are judgment calls, not rigid rules — flag only when it genuinely breaks the experience:
+- **UI Stack** — any data-bound screen must handle **loading / empty / error**: no infinite spinner, no
+  blank/broken view when there's no data, no crash/garbage on error. Missing empty/error handling is a flaw
+  even if the wireframe doesn't spell out the copy.
+- **Form basics** — invalid input blocks submit and surfaces a clear error; required fields are enforced.
+- **Accessibility** — visible focus ring, keyboard-operable, modals **trap focus and return it on close**,
+  tap targets ~44px, images have alt text, sufficient contrast, headings semantic, a skip link on long pages.
+- **History** — browser/hardware **back and forward** behave correctly (no broken SPA history, no losing state).
+- **Robustness** — no console/network errors surfacing to the user, no broken images, no layout overflow/clipping,
+  no true dead-ends (a screen with no way forward *and* no back that isn't a terminal success screen).
+- **Bad routes** — a nonsense URL shows a real 404/empty state, not a crash.
 
 ## 1. Key responsibilities & actions
 

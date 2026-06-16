@@ -33,7 +33,13 @@ You are the last agent to run before a task can move to PROGRESS.md. If you reje
    - Did the Builder add commented-out code or TODOs?
    - Are there new external dependencies added that weren't in the task scope?
 
-6. Read the relevant LESSONS.md entries (filtered by task tags) — does the implementation respect prior learnings?
+6. **WIREFRAME.yaml consistency** — if `WIREFRAME.yaml` exists and this task **added, changed, or removed a
+   page, route, screen, flow, modal/sheet, or auth boundary**, was `WIREFRAME.yaml` updated to match? The
+   wireframe is the UI source of truth that `/uitest` and `/improve` check against; a UI change that doesn't
+   update it creates drift. If the UI changed but the wireframe didn't, REJECT with "WIREFRAME.yaml not
+   updated for this UI change." (Pure backend/non-UI tasks: skip this check.)
+
+7. Read the relevant LESSONS.md entries (filtered by task tags) — does the implementation respect prior learnings?
 
 ## Decision
 

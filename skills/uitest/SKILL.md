@@ -1,6 +1,6 @@
 ---
 name: uitest
-description: "Deploy an army of autonomous 'client' UI agents that drive a real browser like humans — register accounts, click, navigate, screenshot — to find visual glitches, empty/broken buttons, mis-routed navigation, wrong scroll targets, broken workflows, and responsive breakage on desktop AND mobile, one agent per user role. Full sweep by default; scope a partial review with --pages/--roles/--desktop-only/--smoke. Produces a strict UI_FLAW_REPORT.md and auto-cleans the test accounts it creates. Use with: /uitest or /uitest <url> or /uitest --pages /checkout,/cart or /uitest --smoke"
+description: "Deploy an army of autonomous 'client' UI agents that drive a real browser like humans — register accounts, click, navigate, screenshot — to find visual glitches, empty/broken buttons, mis-routed navigation, wrong scroll targets, broken workflows, missing auth/login flows, broken error states, and responsive breakage on desktop AND mobile, one agent per user role. When WIREFRAME.yaml exists it checks reality against declared intent (flows, auth gating, component interactions, form outcomes, states). Full sweep by default; scope a partial review with --pages/--roles/--desktop-only/--smoke. Produces a strict UI_FLAW_REPORT.md and auto-cleans the test accounts it creates. Use with: /uitest or /uitest <url> or /uitest --pages /checkout,/cart or /uitest --smoke"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep, Agent, ToolSearch
 argument-hint: "[base URL] [--pages a,b] [--roles a,b] [--desktop-only] [--smoke] [--no-cleanup] [--keep-screenshots]"
 ---
@@ -70,6 +70,18 @@ Build the route inventory **from the codebase** so coverage is grounded in fact,
 
 This `PAGE_INVENTORY` is the authoritative row-set of the coverage matrix below. "Every page" means every entry here — the agent cannot define the scope down by only visiting what it happened to find. **If `--pages` (or a diff-scoped Coordinator deployment) was given, filter the inventory to those routes now** — that filtered set becomes the matrix rows. Still build the full inventory first so you can validate that the requested routes actually exist (warn on any that don't).
 
+### Intent overlay — load `WIREFRAME.yaml`
+If `WIREFRAME.yaml` exists at the project root, load it — it is the project's declared UI **intent**, and it turns the testers from "does the button do *something*" into "does it do **what's intended**." Use it two ways:
+1. **Enrich the matrix** — pull per-page `auth`/`roles` and the `journeys` (critical end-to-end paths) from it so role assignment + flow expectations are grounded in intent, not just guessed from route guards.
+2. **Drift check (do this now, deterministically)** — diff `PAGE_INVENTORY` (from code) against the wireframe's `pages`:
+   - a route in code but **absent from** the wireframe → flag `Logical Workflow Issue` (Medium): "undocumented page — wireframe drift".
+   - a wireframe page with **no matching route** in code → flag `Logical Workflow Issue` (High): "intended page missing from the app".
+   Add these to the report's flaw set before dispatching the army.
+
+   If `WIREFRAME.yaml` has `has_ui: false` but `HAS_UI=1` was detected above, that itself is drift — the project grew a UI without updating the wireframe; flag it `High` and proceed using the code inventory.
+
+If there is **no** `WIREFRAME.yaml`, proceed with the code inventory alone and let the agents rely on judgment + the universal heuristics (the run is still valid, just without the intent answer-key).
+
 ## 4. Deploy the army (coverage-driven, parallel)
 
 The `ui-tester` agents are **read-only to code** (they only return findings + created-account records), so they run safely in parallel — unlike the serial code-review pipeline.
@@ -80,6 +92,7 @@ For each role, dispatch a `ui-tester` agent (use the Agent tool; concurrent, cap
 - The persona/checklist from `.agents/ui-tester.md`
 - Its assigned **role** + how to register/log in as it
 - Its **explicit page list** (its rows of the matrix) and **both viewports** (desktop then mobile) — it is NOT done until every page on its list is visited at every viewport with every interactive element exercised (its **coverage contract** — see `.agents/ui-tester.md`)
+- **`WIREFRAME.yaml`** (the whole file, if it exists) — its **answer key** for intent checks (section 0.5 of the agent): declared destinations, auth gating, component `dismiss` interactions, `back` intent, form `on_success`/`on_error` outcomes, declared `states`, and `external` handoffs. The agent flags reality-vs-intent mismatches, not just liveness.
 - The **base URL**, the **run ID**, and the screenshot directory `.uitest/screenshots/<runid>/`
 - Relevant `LESSONS.md` entries tagged `[ui] [ux] [a11y]`
 
