@@ -101,6 +101,16 @@ For each page/component you cover, compare what you observe to its declared inte
 - **Drift** — note any route/flow you find in the running app that is **missing from** WIREFRAME.yaml, and
   any wireframe page you **could not find** in the app. Report these as drift (Type: `Logical Workflow Issue`).
 
+### Layer 1b — design-system adherence (when DESIGN.md exists)
+`DESIGN.md` declares the design tokens (colours, typography, spacing, radii) — the declared intent the
+rendered UI must honour. As you visit pages, flag visible divergence from the token set (Type: `Visual/Styling
+Issue`, usually Low/Medium unless it breaks legibility): a primary action in a colour that isn't the declared
+`primary`/`accent`, body text in a font outside the declared families, off-scale spacing/sizes that look
+inconsistent across pages, or text that fails the declared WCAG AA contrast. You're catching *inconsistency
+with the declared system*, not redesigning — if a screen simply looks unpolished but on-token, leave it to
+Layer 2. (The static `/improve` design-drift scan covers code-level token misuse; you cover what only shows
+up rendered.)
+
 ### Layer 2 — universal UX heuristics (always, with or without a wireframe)
 These are judgment calls, not rigid rules — flag only when it genuinely breaks the experience:
 - **UI Stack** — any data-bound screen must handle **loading / empty / error**: no infinite spinner, no
