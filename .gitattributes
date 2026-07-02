@@ -1,0 +1,4 @@
+# Keep Unix shell scripts as LF so `bash install.sh` works after a Windows clone
+*.sh    text eol=lf
+# PowerShell scripts checkout native (CRLF on Windows)
+*.ps1   text
