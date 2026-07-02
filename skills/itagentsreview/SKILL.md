@@ -303,7 +303,7 @@ Keep output minimal. The user can `tail -f PROGRESS.md` for detail.
 
 ## APPENDIX A: Embedded agent fallbacks
 
-If the global templates folder is missing, create these `.agents/*.md` files inline. Each file's content matches the equivalent template under `agents/` in this repo (see the agents/ folder of autonomous-claude-itagents). Use the exact frontmatter and body. Default agents to create:
+If the global templates folder is missing, create these `.agents/*.md` files inline. Each file's content matches the equivalent template under `agents/` in this repo (see the agents/ folder of WillowForClaude-itagents). Use the exact frontmatter and body. Default agents to create:
 
 - `.agents/coordinator.md` (you — but useful for transparency)
 - `.agents/builder.md`
@@ -317,4 +317,4 @@ If the global templates folder is missing, create these `.agents/*.md` files inl
 - `.agents/pr-merger.md` (final gate for PR merges, used by /mergeprs)
 - `.agents/registry.md` (the registry of which agents run when)
 
-For source content, fetch from: https://github.com/fransanda/autonomous-claude-itagents/tree/main/agents
+For source content, fetch from: https://github.com/fransanda/WillowForClaude-itagents/tree/main/agents

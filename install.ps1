@@ -1,5 +1,5 @@
-﻿# install.ps1 — Install autonomous-claude-itagents skills (companion to autonomous-claude-skills)
-# Remote install: irm https://raw.githubusercontent.com/fransanda/autonomous-claude-itagents/main/install.ps1 | iex
+﻿# install.ps1 — Install WillowForClaude-itagents skills (companion to WillowForClaude-skills)
+# Remote install: irm https://raw.githubusercontent.com/fransanda/WillowForClaude-itagents/main/install.ps1 | iex
 # Local install:  .\install.ps1 (from inside a cloned repo)
 
 $ErrorActionPreference = "Stop"
@@ -19,9 +19,9 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "skills\itagentsrevie
     }
     $tempClone = Join-Path $env:TEMP "_acs_itagents_install_$(Get-Random)"
     Write-Host "Fetching itagents..." -ForegroundColor Cyan
-    git clone --depth=1 --quiet https://github.com/fransanda/autonomous-claude-itagents.git $tempClone
+    git clone --depth=1 --quiet https://github.com/fransanda/WillowForClaude-itagents.git $tempClone
     if ($LASTEXITCODE -ne 0) {
-        Write-Host "Error: failed to clone autonomous-claude-itagents (network down or repo unavailable)." -ForegroundColor Red
+        Write-Host "Error: failed to clone WillowForClaude-itagents (network down or repo unavailable)." -ForegroundColor Red
         if (Test-Path $tempClone) { Remove-Item $tempClone -Recurse -Force }
         return
     }
@@ -29,7 +29,7 @@ if ($PSScriptRoot -and (Test-Path (Join-Path $PSScriptRoot "skills\itagentsrevie
 }
 
 Write-Host ""
-Write-Host "Installing autonomous-claude-itagents skills..." -ForegroundColor Cyan
+Write-Host "Installing WillowForClaude-itagents skills..." -ForegroundColor Cyan
 Write-Host ""
 
 $installed = @()
@@ -72,7 +72,7 @@ if ($installed.Count -eq 4) {
     Write-Host "  /mergeprs                — review and merge open PRs autonomously" -ForegroundColor White
     Write-Host "  /uitest                  — deploy the live-browser UI testing army" -ForegroundColor White
     Write-Host ""
-    Write-Host "Note: requires autonomous-claude-skills installed first." -ForegroundColor Gray
+    Write-Host "Note: requires WillowForClaude-skills installed first." -ForegroundColor Gray
     Write-Host ""
 } else {
     Write-Host "Installation incomplete: $($installed.Count) of 4 skills installed. Installed: $($installed -join ', ')" -ForegroundColor Yellow

@@ -334,4 +334,4 @@ Comment all accumulated findings on the PR. Log as FAILED. Move to next PR. Don'
 
 ## APPENDIX A: Embedded pr-merger agent fallback
 
-If the global templates folder doesn't contain `pr-merger.md`, create `.agents/pr-merger.md` using the definition from the `agents/pr-merger.md` file in the autonomous-claude-itagents repo. See: https://github.com/fransanda/autonomous-claude-itagents/tree/main/agents
+If the global templates folder doesn't contain `pr-merger.md`, create `.agents/pr-merger.md` using the definition from the `agents/pr-merger.md` file in the WillowForClaude-itagents repo. See: https://github.com/fransanda/WillowForClaude-itagents/tree/main/agents
