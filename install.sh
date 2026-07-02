@@ -1,6 +1,6 @@
 #!/bin/bash
-# install.sh — Install WillowForClaude-itagents skills (companion to WillowForClaude-skills)
-# Remote: curl -fsSL https://raw.githubusercontent.com/fransanda/WillowForClaude-itagents/main/install.sh | bash
+# install.sh — Install WilowForClaude-itagents skills (companion to WilowForClaude-skills)
+# Remote: curl -fsSL https://raw.githubusercontent.com/fransanda/WilowForClaude-itagents/main/install.sh | bash
 # Local:  ./install.sh (from inside a cloned repo)
 
 set -e
@@ -17,15 +17,15 @@ else
         echo "Error: git is required to install. Install git first."
         exit 1
     fi
-    TEMP_CLONE="$(mktemp -d)/WillowForClaude-itagents"
+    TEMP_CLONE="$(mktemp -d)/WilowForClaude-itagents"
     trap '[ -n "$TEMP_CLONE" ] && rm -rf "$(dirname "$TEMP_CLONE")"' EXIT
     echo "Fetching itagents..."
-    git clone --depth=1 --quiet https://github.com/fransanda/WillowForClaude-itagents.git "$TEMP_CLONE"
+    git clone --depth=1 --quiet https://github.com/fransanda/WilowForClaude-itagents.git "$TEMP_CLONE"
     SOURCE_ROOT="$TEMP_CLONE"
 fi
 
 echo ""
-echo "Installing WillowForClaude-itagents skills..."
+echo "Installing WilowForClaude-itagents skills..."
 echo ""
 
 # 1. Install the skills (/itagentsreview, /additagent, /mergeprs, /uitest) to both possible skill dirs
@@ -62,8 +62,8 @@ if [ $INSTALLED_SKILLS -eq 4 ]; then
     echo "  /mergeprs                — review and merge open PRs autonomously"
     echo "  /uitest                  — deploy the live-browser UI testing army"
     echo ""
-    echo "Note: requires WillowForClaude-skills installed first."
-    echo "  curl -fsSL https://raw.githubusercontent.com/fransanda/WillowForClaude-skills/main/install.sh | bash"
+    echo "Note: requires WilowForClaude-skills installed first."
+    echo "  curl -fsSL https://raw.githubusercontent.com/fransanda/WilowForClaude-skills/main/install.sh | bash"
     echo ""
 else
     echo "⚠️  Installation incomplete: $INSTALLED_SKILLS of 4 skills installed"

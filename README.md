@@ -2,7 +2,7 @@
 
 **An 11-agent QA pipeline that reviews every line of code Claude writes — and an army of "client" agents that test the live UI like real humans.**
 
-This repo is the companion to [WillowForClaude-skills](https://github.com/fransanda/WillowForClaude-skills). When both are installed, every project gets:
+This repo is the companion to [WilowForClaude-skills](https://github.com/fransanda/WilowForClaude-skills). When both are installed, every project gets:
 
 - A private GitHub repo (auto-created)
 - Autonomous building from a backlog
@@ -25,7 +25,7 @@ Result: the same monthly Claude bill, but every task goes through 7+ review pass
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│  /kickoff or /autonomy (from WillowForClaude-skills)       │
+│  /kickoff or /autonomy (from WilowForClaude-skills)       │
 │  → Sets up project, including .agents/ folder                │
 │  → Builder works through BACKLOG, fills REVIEW_QUEUE         │
 └──────────────────────┬───────────────────────────────────────┘
@@ -104,7 +104,7 @@ Run it on demand with `/uitest` (or `/uitest https://staging.example.com`, `/uit
 
 ### Prerequisites
 1. [Claude Code](https://docs.anthropic.com/en/docs/claude-code/overview) installed and authenticated
-2. **[WillowForClaude-skills](https://github.com/fransanda/WillowForClaude-skills) installed first** (this repo extends it)
+2. **[WilowForClaude-skills](https://github.com/fransanda/WilowForClaude-skills) installed first** (this repo extends it)
 3. [GitHub CLI](https://cli.github.com/) (`gh`) installed and authenticated
 4. Git installed
 5. A Claude Pro, Max, or API subscription
@@ -118,28 +118,28 @@ Run it on demand with `/uitest` (or `/uitest https://staging.example.com`, `/uit
 
 ### Install in 2 steps
 
-**Step 1: Install WillowForClaude-skills (the base)**
+**Step 1: Install WilowForClaude-skills (the base)**
 
 Mac/Linux:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fransanda/WillowForClaude-skills/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fransanda/WilowForClaude-skills/main/install.sh | bash
 ```
 
 Windows (PowerShell):
 ```powershell
-irm https://raw.githubusercontent.com/fransanda/WillowForClaude-skills/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/fransanda/WilowForClaude-skills/main/install.ps1 | iex
 ```
 
-**Step 2: Install WillowForClaude-itagents (this repo)**
+**Step 2: Install WilowForClaude-itagents (this repo)**
 
 Mac/Linux:
 ```bash
-curl -fsSL https://raw.githubusercontent.com/fransanda/WillowForClaude-itagents/main/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/fransanda/WilowForClaude-itagents/main/install.sh | bash
 ```
 
 Windows (PowerShell):
 ```powershell
-irm https://raw.githubusercontent.com/fransanda/WillowForClaude-itagents/main/install.ps1 | iex
+irm https://raw.githubusercontent.com/fransanda/WilowForClaude-itagents/main/install.ps1 | iex
 ```
 
 **Restart Claude Code** after installing.
@@ -415,7 +415,7 @@ foreach ($d in @("$env:USERPROFILE\.claude\skills","$env:USERPROFILE\.agents\ski
 }
 ```
 
-This removes the agent skills but leaves `WillowForClaude-skills` intact.
+This removes the agent skills but leaves `WilowForClaude-skills` intact.
 
 ---
 
@@ -429,7 +429,7 @@ Ideas, improvements, and new default agents welcome. Open an issue or PR.
 
 ## Integration with `/improve`
 
-The `/improve` command from [WillowForClaude-skills](https://github.com/fransanda/WillowForClaude-skills) automatically detects this repo's agents and uses them for deeper scanning. When itagents is installed, `/improve` loads `security-analyzer`, `bug-finder`, `performance-optimizer`, and `dependency-auditor` during its scan phase — giving the improvement loop the same specialist analysis as the full review pipeline, without requiring a manual `/itagentsreview` call.
+The `/improve` command from [WilowForClaude-skills](https://github.com/fransanda/WilowForClaude-skills) automatically detects this repo's agents and uses them for deeper scanning. When itagents is installed, `/improve` loads `security-analyzer`, `bug-finder`, `performance-optimizer`, and `dependency-auditor` during its scan phase — giving the improvement loop the same specialist analysis as the full review pipeline, without requiring a manual `/itagentsreview` call.
 
 ### Auto-merging PRs after /improve
 
@@ -444,4 +444,4 @@ This runs the full `/mergeprs` pipeline (adaptive review + Builder fixes + PR Me
 
 ## Sister project
 
-[WillowForClaude-skills](https://github.com/fransanda/WillowForClaude-skills) — the base layer that makes Claude Code work autonomously. Required for this repo. Includes `/kickoff`, `/autonomy`, `/improve`, and `/ship`.
+[WilowForClaude-skills](https://github.com/fransanda/WilowForClaude-skills) — the base layer that makes Claude Code work autonomously. Required for this repo. Includes `/kickoff`, `/autonomy`, `/improve`, and `/ship`.
