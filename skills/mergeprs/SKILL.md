@@ -138,7 +138,7 @@ the same rules and may already have commented):
   (a `Digest:` and at most three short attributed quotes — never a transcript);
 - no NEW top-level folder appears without a group covering it in `governance/ownership.yaml`;
 - a change touching `governance/**`, `systems/*/component.yaml`, `company/offers/**` or a new
-  `systems/*` folder comes with a `decisions/<YYYY-MM-DD>-<slug>.md`;
+  `systems/*` folder comes with a `decisions/<YYYY-MM-DD>-<slug>.md` — except when the only governance edit adds a path to a group's `paths` in `governance/ownership.yaml` (registering a new folder is not a decision; its change record covers it);
 - no secret VALUE was added anywhere (tokens, keys, passwords); references (`ref:`) are fine.
 
 Do NOT hold for the record's `author`, `domains`, the `changes/INDEX.md` line, or commit hashes
