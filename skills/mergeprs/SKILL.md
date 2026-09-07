@@ -1,6 +1,6 @@
 ---
 name: mergeprs
-description: "Autonomous PR review and merge. Reviews open PRs using the agent pipeline, fixes issues via Builder, and merges approved PRs. Default: the agent's improve/* PRs and collaborator wilow/* PRs, never drafts. Use --all for all open PRs. Use with: /mergeprs or /mergeprs --all"
+description: "Autonomous PR review and merge. Reviews open PRs using the agent pipeline, fixes issues via Builder, and merges approved PRs. Default: the agent's improve/* PRs, collaborator wilow/* PRs and workstream ws/* PRs, never drafts. Use --all for all open PRs. Use with: /mergeprs or /mergeprs --all"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 argument-hint: "[optional: --all to process all open PRs]"
 ---
@@ -96,7 +96,7 @@ if [ "$SCOPE" = "improve-only" ]; then
     # (a collaborator's Wilow pushes to wilow/<login>; the owner's Wilow is the merger). Drafts are
     # never touched in either scope.
     gh pr list --state open --json number,title,headRefName,createdAt,isDraft \
-        --jq '[.[] | select(((.headRefName | startswith("improve/")) or (.headRefName | startswith("wilow/"))) and (.isDraft | not))] | sort_by(.createdAt)'
+        --jq '[.[] | select(((.headRefName | startswith("improve/")) or (.headRefName | startswith("wilow/")) or (.headRefName | startswith("ws/"))) and (.isDraft | not))] | sort_by(.createdAt)'
 else
     gh pr list --state open --json number,title,headRefName,createdAt,isDraft \
         --jq '[.[] | select(.isDraft | not)] | sort_by(.createdAt)'
