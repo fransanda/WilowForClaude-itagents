@@ -1,6 +1,6 @@
 ---
 name: mergeprs
-description: "Autonomous PR review and merge. Reviews open PRs using the agent pipeline, fixes issues via Builder, and merges approved PRs. Default: only improve/* PRs. Use --all for all open PRs. Use with: /mergeprs or /mergeprs --all"
+description: "Autonomous PR review and merge. Reviews open PRs using the agent pipeline, fixes issues via Builder, and merges approved PRs. Default: the agent's improve/* PRs and collaborator wilow/* PRs, never drafts. Use --all for all open PRs. Use with: /mergeprs or /mergeprs --all"
 allowed-tools: Read, Write, Edit, Bash, Glob, Grep
 argument-hint: "[optional: --all to process all open PRs]"
 ---
@@ -60,8 +60,8 @@ If the section doesn't exist, use defaults:
 
 ### 5. Determine PR scope from arguments and config
 
-- If `$ARGUMENTS` contains `--all` → scope = all open PRs
-- Else → use `merge_scope` from config (`improve-only` or `all`)
+- If `$ARGUMENTS` contains `--all` → scope = all open non-draft PRs
+- Else → use `merge_scope` from config (`improve-only` = improve/* + collaborator wilow/* branches, or `all`)
 
 ### 6. Load project context
 
@@ -92,11 +92,14 @@ If `pr-merger.md` is missing from `.agents/`, copy it from global templates:
 
 ```bash
 if [ "$SCOPE" = "improve-only" ]; then
-    gh pr list --state open --json number,title,headRefName,createdAt \
-        --jq '[.[] | select(.headRefName | startswith("improve/"))] | sort_by(.createdAt)'
+    # Default scope (2026-09-07): the agent's own improve/* PRs AND collaborator wilow/* PRs
+    # (a collaborator's Wilow pushes to wilow/<login>; the owner's Wilow is the merger). Drafts are
+    # never touched in either scope.
+    gh pr list --state open --json number,title,headRefName,createdAt,isDraft \
+        --jq '[.[] | select(((.headRefName | startswith("improve/")) or (.headRefName | startswith("wilow/"))) and (.isDraft | not))] | sort_by(.createdAt)'
 else
-    gh pr list --state open --json number,title,headRefName,createdAt \
-        --jq 'sort_by(.createdAt)'
+    gh pr list --state open --json number,title,headRefName,createdAt,isDraft \
+        --jq '[.[] | select(.isDraft | not)] | sort_by(.createdAt)'
 fi
 ```
 
@@ -125,6 +128,22 @@ retry_count = 0
 ### Step 0: Verify PR is still open
 gh pr view <number> --json state --jq '.state'
 If not "OPEN": print "PR #<number> is no longer open, skipping." and continue to next PR.
+
+### Step 0b: Company OS gate (only when the repository has `governance/mode.yaml`)
+
+Hold the PR — do not merge, do not fix — unless ALL of these are true (Wilow's daemon pre-checks
+the same rules and may already have commented):
+- the PR adds or updates a change record `changes/<YYYY-MM-DD>-<slug>/CONTEXT.md` with front matter
+  (`id`), `## Intent`, `## What changed`, `## Decisions`, `## Open questions`, `## Conversation`
+  (a `Digest:` and at most three short attributed quotes — never a transcript);
+- no NEW top-level folder appears without a group covering it in `governance/ownership.yaml`;
+- a change touching `governance/**`, `systems/*/component.yaml`, `company/offers/**` or a new
+  `systems/*` folder comes with a `decisions/<YYYY-MM-DD>-<slug>.md`;
+- no secret VALUE was added anywhere (tokens, keys, passwords); references (`ref:`) are fine.
+
+**Every hold or rejection comment starts with `Wilow held this PR:`** followed by one specific
+reason and what to change — the collaborator's own Wilow relays exactly that prefix into their
+chat as a failure receipt; any other wording is invisible to them.
 
 ### Step 1: Checkout the PR branch
 git checkout <branch>
