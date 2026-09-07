@@ -141,6 +141,10 @@ the same rules and may already have commented):
   `systems/*` folder comes with a `decisions/<YYYY-MM-DD>-<slug>.md`;
 - no secret VALUE was added anywhere (tokens, keys, passwords); references (`ref:`) are fine.
 
+Do NOT hold for the record's `author`, `domains`, the `changes/INDEX.md` line, or commit hashes
+quoted in it — Wilow's daemon corrects those itself when the record lands; a hold is only for a
+missing/malformed record, an unowned new folder, a missing decision record, or a secret value.
+
 **Every hold or rejection comment starts with `Wilow held this PR:`** followed by one specific
 reason and what to change — the collaborator's own Wilow relays exactly that prefix into their
 chat as a failure receipt; any other wording is invisible to them.
