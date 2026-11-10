@@ -1,3 +1,7 @@
+> **DEPRECATED.** This repository is frozen. Wilow now lives in one private repository,
+> `fransanda/Wilow`. What you installed from here keeps working at its last version and receives
+> no further updates. For current Wilow, use the installer at https://wilow.team.
+
 # 🤖 Autonomous Claude ITAgents
 
 **An 11-agent QA pipeline that reviews every line of code Claude writes — and an army of "client" agents that test the live UI like real humans.**
